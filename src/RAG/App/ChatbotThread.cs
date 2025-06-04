@@ -6,6 +6,13 @@ using Qdrant.Client.Grpc;
 
 namespace RAG;
 
+/// <summary>
+/// Represents a chat session for answering questions about a specific product.
+/// </summary>
+/// <param name="chatClient">The chat client used to generate answers.</param>
+/// <param name="embeddingGenerator">Generator used for computing message embeddings.</param>
+/// <param name="qdrantClient">Client used to search the manual embeddings.</param>
+/// <param name="currentProduct">The product that is currently being discussed.</param>
 public class ChatbotThread(
     IChatClient chatClient,
     IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator,
@@ -31,6 +38,12 @@ public class ChatbotThread(
         */
     ];
 
+    /// <summary>
+    /// Answers a user message using information retrieved from product manuals.
+    /// </summary>
+    /// <param name="userMessage">The question from the user.</param>
+    /// <param name="cancellationToken">Token used to cancel the operation.</param>
+    /// <returns>The answer text, an optional citation and all context chunks used.</returns>
     public async Task<(string Text, Citation? Citation, string[] AllContext)> AnswerAsync(string userMessage, CancellationToken cancellationToken = default)
     {
         // For a simple version of RAG, we'll embed the user's message directly and
@@ -117,6 +130,12 @@ public class ChatbotThread(
         return closestChunks.Select(c => new SearchResult((int)c.Id.Num, (int)c.Payload["productId"].IntegerValue, c.Payload["text"].StringValue)).ToArray();
     }
 
+    /// <summary>
+    /// Represents a citation from a product manual used as evidence for an answer.
+    /// </summary>
+    /// <param name="ProductId">Identifier of the product manual.</param>
+    /// <param name="PageNumber">Page number within the manual.</param>
+    /// <param name="Quote">Short quote from the manual.</param>
     public record Citation(int ProductId, int PageNumber, string Quote);
     private record SearchResult(int ManualExtractId, int ProductId, string ManualExtractText);
     private record ChatBotAnswer(int? ManualExtractId, string? ManualQuote, string AnswerText);

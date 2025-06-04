@@ -4,12 +4,22 @@ using Qdrant.Client;
 
 namespace RAG;
 
+/// <summary>
+/// Hosted service that runs a simple product manual chatbot on startup.
+/// </summary>
+/// <param name="chatClient">The chat client used to generate answers.</param>
+/// <param name="embeddingGenerator">Generator used for creating embeddings for search.</param>
+/// <param name="qdrantClient">Client for the Qdrant vector database.</param>
 public class Chatbot(
     IChatClient chatClient,
     IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator,
     QdrantClient qdrantClient)
     : IHostedService
 {
+    /// <summary>
+    /// Starts the chatbot service and begins interacting with the user.
+    /// </summary>
+    /// <param name="cancellationToken">Token used to cancel the operation.</param>
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         var currentProduct = Helpers.GetCurrentProduct();
@@ -42,6 +52,10 @@ public class Chatbot(
         }
     }
 
+    /// <summary>
+    /// Stops the chatbot service.
+    /// </summary>
+    /// <param name="cancellationToken">Token used to cancel the operation.</param>
     public Task StopAsync(CancellationToken cancellationToken)
         => Task.CompletedTask;
 }
