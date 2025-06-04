@@ -61,11 +61,28 @@ foreach (var imagePath in trafficImages)
     }
 }
 
+/// <summary>
+/// Result returned from the traffic camera analysis.
+/// </summary>
 class TrafficCamResult
 {
+    /// <summary>
+    /// Gets or sets the detected traffic status.
+    /// </summary>
     public TrafficStatus Status { get; set; }
+
+    /// <summary>
+    /// Gets or sets the number of cars detected.
+    /// </summary>
     public int NumCars { get; set; }
+
+    /// <summary>
+    /// Gets or sets the number of trucks detected.
+    /// </summary>
     public int NumTrucks { get; set; }
 
+    /// <summary>
+    /// Status values used for traffic analysis.
+    /// </summary>
     public enum TrafficStatus { Clear, Flowing, Congested, Blocked };
 }

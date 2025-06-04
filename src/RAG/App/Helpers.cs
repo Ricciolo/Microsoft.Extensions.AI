@@ -2,13 +2,27 @@
 
 namespace RAG;
 
+/// <summary>
+/// Helper methods for accessing demo product information.
+/// </summary>
 public static class Helpers
 {
+    /// <summary>
+    /// Gets the path to the sample data directory.
+    /// </summary>
     public static readonly string DataDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../data"));
 
+    /// <summary>
+    /// Reads all products from the sample data file.
+    /// </summary>
+    /// <returns>An array of available products.</returns>
     public static Product[] GetAllProducts()
         => JsonSerializer.Deserialize<Product[]>(File.ReadAllText(Path.Combine(DataDir, "products.json")))!;
 
+    /// <summary>
+    /// Prompts the user to choose a product to use for the chat demo.
+    /// </summary>
+    /// <returns>The selected <see cref="Product"/>.</returns>
     public static Product GetCurrentProduct()
     {
         // In a real app, the user would likely already have some context, such as being on the page

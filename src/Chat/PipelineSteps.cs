@@ -10,14 +10,27 @@ using Microsoft.Extensions.AI;
 namespace Chat;
 internal static class PipelineSteps
 {
+    /// <summary>
+    /// Adds a middleware that forces replies in the specified language.
+    /// </summary>
+    /// <param name="builder">The chat client builder.</param>
+    /// <param name="language">The language the assistant should reply with.</param>
+    /// <returns>The <see cref="ChatClientBuilder"/> instance.</returns>
     public static ChatClientBuilder UseLanguage(this ChatClientBuilder builder, string language)
         => builder.Use(i => new LanguageChatClient(i, language));
 
+    /// <summary>
+    /// Adds a middleware that rate limits chat completions.
+    /// </summary>
+    /// <param name="builder">The chat client builder.</param>
+    /// <param name="window">The time window in which a single request is allowed.</param>
+    /// <returns>The <see cref="ChatClientBuilder"/> instance.</returns>
     public static ChatClientBuilder UseRateLimit(this ChatClientBuilder builder, TimeSpan window)
         => builder.Use(i => new RateLimitChatClient(i, window));
 
     private class LanguageChatClient(IChatClient innerClient, string language) : DelegatingChatClient(innerClient)
     {
+        /// <inheritdoc />
         public override async Task<ChatCompletion> CompleteAsync(IList<ChatMessage> chatMessages, ChatOptions? options = null,
             CancellationToken cancellationToken = new CancellationToken())
         {
@@ -45,6 +58,7 @@ internal static class PipelineSteps
             PermitLimit = 1
         });
 
+        /// <inheritdoc />
         public override async Task<ChatCompletion> CompleteAsync(IList<ChatMessage> chatMessages, ChatOptions? options = null,
             CancellationToken cancellationToken = new CancellationToken())
         {

@@ -101,10 +101,20 @@ async Task Demo2()
     }
 }
 
+/// <summary>
+/// Simple shopping cart used by the chat demo.
+/// </summary>
 class Cart
 {
+    /// <summary>
+    /// Gets or sets the number of items in the cart.
+    /// </summary>
     public int Total { get; set; }
 
+    /// <summary>
+    /// Adds the specified number of puffin cans to the cart.
+    /// </summary>
+    /// <param name="count">The number of cans to add.</param>
     public void AddPuffinToCart(int count)
     {
         Total += count;
@@ -115,6 +125,11 @@ class Cart
         Console.ForegroundColor = ConsoleColor.White;
     }
 
+    /// <summary>
+    /// Calculates the price of the specified number of puffin cans.
+    /// </summary>
+    /// <param name="count">The number of cans.</param>
+    /// <returns>The total price in euros.</returns>
     [Description("Calcola il prezzo di una scatola di puffin e restituisce il prezzo in euro.")]
     public float GetPrice(
         [Description("Il numero di scatole per il quale calcolare il prezzo in euro")] int count)
